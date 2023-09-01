@@ -1,5 +1,22 @@
 # Defined the factors and their associated options and ratings
+"""
+Here's an overview of how the code works:
 
+1.Four dictionaries are defined to represent different sets of factors related to the risk assessment:
+threat_agent_factors, vulnerability_factors, technical_impact_factors, and business_impact_factors. Each factor has associated options and their corresponding ratings.
+
+2.There is a function collect_user_input to collect user input for a specific factor and validate it. 
+It displays the available options and ratings and ensures that the input is a valid numeric option.
+
+3.User inputs are collected for each factor within the four categories (threat agents, vulnerabilities, technical impact, and business impact) using a loop. 
+The selections are stored in separate dictionaries: threat_agent_selections, vulnerability_selections, technical_impact_selections, and business_impact_selections.
+
+4.Another function calculate_likelihood_and_impact_score calculates the likelihood and impact scores separately by multiplying the selected options for each factor within a category.
+
+5.The determine_risk_severity function takes the likelihood and impact scores as inputs and determines the overall risk severity based on predefined criteria.
+
+6.Finally, the script prints the likelihood score, impact score, and risk severity based on the user's selections.
+"""
 threat_agent_factors = {
     "Skill Level": {"No technical skills": 1, 
                     "Some technical skills": 3, 
