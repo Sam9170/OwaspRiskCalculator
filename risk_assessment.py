@@ -17,6 +17,9 @@ The selections are stored in separate dictionaries: threat_agent_selections, vul
 
 6.Finally, the script prints the likelihood score, impact score, and risk severity based on the user's selections.
 """
+# OWASP Risk Assessment Standards
+
+# Define factors and their associated options and ratings
 threat_agent_factors = {
     "Skill Level": {"No technical skills": 1, 
                     "Some technical skills": 3, 
@@ -40,6 +43,7 @@ threat_agent_factors = {
              "Authenticated users": 6, 
              "Anonymous Internet users": 9}
 }
+#Created a dictionary for storing threat_Agent_factors
 
 vulnerability_factors = {
     "Ease of Discovery": {"Practically impossible": 1, 
@@ -61,6 +65,9 @@ vulnerability_factors = {
                             "Logged without review": 8, 
                             "Not logged": 9}
 }
+
+#Created a dictionary for storing vulnerabilty_factors
+
 
 technical_impact_factors = {
     "Loss of Confidentiality": {"Minimal non-sensitive data disclosed": 2, 
@@ -86,6 +93,9 @@ technical_impact_factors = {
                                "Completely anonymous": 9}
 }
 
+#Created a dictionary for storing technical_impact_factors
+
+
 business_impact_factors = {
     "Financial damage": {"Less than the cost to fix the vulnerability": 1, 
                          "Minor effect on annual profit": 3, 
@@ -106,6 +116,9 @@ business_impact_factors = {
                           "Thousands of people": 7, 
                           "Millions of people": 9}
 }
+#Created a dictionary for storing business_impact_factors
+
+
 
 # Function to collect user input for a factor and validate it
 def collect_user_input(factor_name, factor_options):
@@ -120,6 +133,19 @@ def collect_user_input(factor_name, factor_options):
             return int(selected_option)
         else:
             print("Invalid option. Please select a valid numeric option.")
+
+# Function to calculate likelihood and impact scores
+def calculate_likelihood_and_impact_score(factors):
+    return sum(factors.values()) / len(factors)  # Average of the scores
+
+# Determine risk severity
+def determine_risk_severity(likelihood_score, impact_score):
+    if likelihood_score < 3 or impact_score < 3:
+        return "LOW"
+    elif 3 <= likelihood_score < 6 or 3 <= impact_score < 6:
+        return "MEDIUM"
+    else:
+        return "HIGH"
 
 # Collect user inputs for threat agent factors
 threat_agent_selections = {}
@@ -145,36 +171,21 @@ for factor, options in business_impact_factors.items():
     selected_option = collect_user_input(factor, options)
     business_impact_selections[factor] = selected_option
 
-# Function to calculate likelihood and impact scores
-def calculate_likelihood_and_impact_score(factors):
-    likelihood_score = 1
-    impact_score = 1
-    for factor, selected_option in factors.items():
-        likelihood_score *= selected_option
-        impact_score *= selected_option
-    return likelihood_score, impact_score
-
 # Calculate likelihood and impact scores separately
-likelihood_score = calculate_likelihood_and_impact_score(threat_agent_selections)
-impact_score = calculate_likelihood_and_impact_score(vulnerability_selections)
+likelihood_score_threat_agent = calculate_likelihood_and_impact_score(threat_agent_selections)
+likelihood_score_vulnerability = calculate_likelihood_and_impact_score(vulnerability_selections)
+likelihood_score = (likelihood_score_threat_agent + likelihood_score_vulnerability) / 2
 
-
-# Determine risk severity
-def determine_risk_severity(likelihood_score, impact_score):
-    if likelihood_score < 3 or impact_score < 3:
-        return "LOW"
-    elif likelihood_score <= 3 and impact_score <= 3:
-        return "LOW"
-    elif (3 < likelihood_score <= 6) or (3 < impact_score <= 6):
-        return "MEDIUM"
-    else:
-        return "HIGH"
+impact_score_technical = calculate_likelihood_and_impact_score(technical_impact_selections)
+impact_score_business = calculate_likelihood_and_impact_score(business_impact_selections)
+impact_score = (impact_score_technical + impact_score_business) / 2
 
 # Determine risk severity
-risk_severity = determine_risk_severity(likelihood_score[0], impact_score[1])
+risk_severity = determine_risk_severity(likelihood_score, impact_score)
 
 # Print the results
 print("\nRisk Assessment Results:")
-print(f"Likelihood Score: {likelihood_score[0]}")
-print(f"Impact Score: {impact_score[1]}")
+print(f"Likelihood Score: {likelihood_score:.3f}")
+print(f"Impact Score: {impact_score:.3f}")
 print(f"Risk Severity: {risk_severity}")
+
