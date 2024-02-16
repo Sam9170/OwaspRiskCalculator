@@ -1,4 +1,5 @@
-# Defined the factors and their associated options and ratings
+# Defined the factors and their associated options and ratings.
+# This code is developed by Sambhram Satapathy.
 """
 Here's an overview of how the code works:
 
